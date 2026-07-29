@@ -1,168 +1,195 @@
 import { motion } from "framer-motion";
-import { Download, FolderOpen, Mail, ChevronDown } from "lucide-react";
-import { personalInfo, floatingTech } from "../data/portfolio";
+import { Download, ArrowRight, MapPin, Sparkles } from "lucide-react";
+import { personalInfo } from "../data/portfolio";
+import TechMarquee from "./ui/TechMarquee";
+
+const stats = [
+  { value: "3+", label: "AI Projects" },
+  { value: "2+", label: "Years Experience" },
+  { value: "90%+", label: "OCR Accuracy" },
+];
 
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.15, delayChildren: 0.3 },
+    transition: { staggerChildren: 0.12, delayChildren: 0.2 },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
 };
 
 export default function Hero() {
   return (
-    <section
-      id="home"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20"
-    >
-      <div className="absolute inset-0 grid-bg" />
-
-      <motion.div
-        className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full bg-primary/10 blur-[150px]"
-        animate={{ scale: [1, 1.2, 1], x: [0, 30, 0] }}
-        transition={{ duration: 8, repeat: Infinity }}
-      />
-      <motion.div
-        className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full bg-secondary/10 blur-[120px]"
-        animate={{ scale: [1.2, 1, 1.2], y: [0, -30, 0] }}
-        transition={{ duration: 6, repeat: Infinity }}
-      />
-      <motion.div
-        className="absolute top-1/2 right-1/3 w-[300px] h-[300px] rounded-full bg-accent/10 blur-[100px]"
-        animate={{ scale: [1, 1.3, 1] }}
-        transition={{ duration: 5, repeat: Infinity }}
-      />
-
-      {floatingTech.map((tech, i) => (
+    <section id="home" className="relative min-h-screen flex flex-col overflow-hidden">
+      <div className="flex-1 flex items-center pt-24 pb-12">
         <motion.div
-          key={tech.label}
-          className="absolute hidden lg:flex items-center justify-center px-4 py-2 rounded-full glass text-xs font-mono font-medium"
-          style={{
-            top: `${15 + (i * 12) % 70}%`,
-            left: `${5 + (i * 17) % 85}%`,
-            color: tech.color,
-            borderColor: `${tech.color}33`,
-          }}
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{
-            opacity: [0.4, 0.8, 0.4],
-            scale: [1, 1.05, 1],
-            y: [0, -15, 0],
-          }}
-          transition={{
-            duration: 4 + i * 0.5,
-            repeat: Infinity,
-            delay: i * 0.3,
-          }}
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="section-container w-full"
         >
-          {tech.label}
-        </motion.div>
-      ))}
+          <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+            {/* Left content */}
+            <div className="lg:col-span-7">
+              <motion.div variants={itemVariants} className="mb-8">
+                <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full glass border border-white/8">
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400" />
+                  </span>
+                  <span className="text-sm text-slate-300">Open to AI &amp; Data Science roles</span>
+                </div>
+              </motion.div>
 
-      <svg className="absolute inset-0 w-full h-full opacity-20 pointer-events-none">
-        {[...Array(6)].map((_, i) => (
-          <motion.line
-            key={i}
-            x1={`${10 + i * 15}%`}
-            y1="0"
-            x2={`${30 + i * 10}%`}
-            y2="100%"
-            stroke="url(#gradient)"
-            strokeWidth="0.5"
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: 0.3 }}
-            transition={{ duration: 2, delay: i * 0.2 }}
-          />
-        ))}
-        <defs>
-          <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#4F46E5" stopOpacity="0" />
-            <stop offset="50%" stopColor="#7C3AED" stopOpacity="1" />
-            <stop offset="100%" stopColor="#06B6D4" stopOpacity="0" />
-          </linearGradient>
-        </defs>
-      </svg>
+              <motion.div variants={itemVariants} className="mb-6">
+                <p className="text-slate-500 font-mono text-sm mb-4 tracking-wide">
+                  // {personalInfo.title}
+                </p>
+                <h1 className="font-display text-5xl sm:text-6xl md:text-7xl xl:text-8xl font-black tracking-tight leading-[0.95]">
+                  <span className="text-white">Shubham</span>
+                  <br />
+                  <span className="gradient-text">Desai</span>
+                </h1>
+              </motion.div>
+
+              <motion.p
+                variants={itemVariants}
+                className="text-lg md:text-xl text-slate-400 leading-relaxed max-w-xl mb-4 font-medium"
+              >
+                {personalInfo.tagline}
+              </motion.p>
+
+              <motion.p
+                variants={itemVariants}
+                className="text-sm text-slate-500 mb-8 flex items-center gap-2"
+              >
+                <MapPin className="w-4 h-4 text-accent/70" />
+                Aurangabad, Maharashtra · Open to remote & onsite roles
+              </motion.p>
+
+              <motion.div variants={itemVariants} className="flex flex-wrap gap-4 mb-12">
+                <a
+                  href="/resume.pdf"
+                  download
+                  className="btn-primary inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl font-semibold text-sm"
+                >
+                  <Download className="w-4 h-4" />
+                  Download Resume
+                </a>
+                <a
+                  href="#projects"
+                  className="btn-secondary inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl font-semibold text-sm text-slate-200"
+                >
+                  View Projects
+                  <ArrowRight className="w-4 h-4" />
+                </a>
+                <a
+                  href="#contact"
+                  className="btn-secondary inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl font-semibold text-sm text-slate-200"
+                >
+                  Contact Me
+                </a>
+              </motion.div>
+
+              <motion.div
+                variants={itemVariants}
+                className="grid grid-cols-3 gap-4 max-w-md"
+              >
+                {stats.map((stat) => (
+                  <div key={stat.label} className="glass-card rounded-2xl p-4 stat-shine">
+                    <p className="font-display text-2xl md:text-3xl font-bold gradient-text">
+                      {stat.value}
+                    </p>
+                    <p className="text-xs text-slate-500 mt-1">{stat.label}</p>
+                  </div>
+                ))}
+              </motion.div>
+            </div>
+
+            {/* Right visual */}
+            <motion.div
+              variants={itemVariants}
+              className="lg:col-span-5 relative hidden lg:block"
+            >
+              <div className="relative mx-auto max-w-md">
+                <div className="absolute -inset-8 bg-gradient-to-br from-primary/20 via-secondary/10 to-accent/20 rounded-full blur-3xl" />
+
+                <div className="relative glass-card rounded-3xl p-8 gradient-border">
+                  <div className="flex justify-center mb-8">
+                    <div className="profile-ring">
+                      <img
+                        src={personalInfo.profileImage}
+                        alt={`${personalInfo.name} profile`}
+                        className="w-40 h-40 rounded-full object-cover object-center"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="text-center mb-6">
+                    <h3 className="font-display text-xl font-bold">{personalInfo.name}</h3>
+                    <p className="text-sm text-slate-400 mt-1">{personalInfo.title.split("|")[0].trim()}</p>
+                  </div>
+
+                  <div className="terminal-window">
+                    <div className="terminal-header">
+                      <span className="terminal-dot bg-red-500/80" />
+                      <span className="terminal-dot bg-yellow-500/80" />
+                      <span className="terminal-dot bg-green-500/80" />
+                      <span className="ml-2 text-xs text-slate-500 font-mono">ai_engineer.py</span>
+                    </div>
+                    <div className="p-4 font-mono text-xs space-y-1.5">
+                      <p><span className="text-purple-400">class</span> <span className="text-yellow-300">AIEngineer</span>:</p>
+                      <p className="pl-4"><span className="text-slate-500">skills</span> = [<span className="text-green-400">"Python"</span>, <span className="text-green-400">"ML"</span>, <span className="text-green-400">"LLMs"</span>]</p>
+                      <p className="pl-4"><span className="text-slate-500">focus</span> = <span className="text-green-400">"Generative AI"</span></p>
+                      <p className="pl-4"><span className="text-purple-400">def</span> <span className="text-blue-400">build</span>(self):</p>
+                      <p className="pl-8"><span className="text-purple-400">return</span> <span className="text-green-400">"intelligent solutions"</span></p>
+                      <p className="text-accent mt-2 flex items-center gap-1">
+                        <Sparkles className="w-3 h-3" /> Ready to deploy
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <motion.div
+                  animate={{ y: [0, -12, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute -top-4 -right-4 glass-card rounded-2xl px-4 py-3 text-xs font-mono text-accent"
+                >
+                  TensorFlow
+                </motion.div>
+                <motion.div
+                  animate={{ y: [0, 10, 0] }}
+                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                  className="absolute -bottom-2 -left-6 glass-card rounded-2xl px-4 py-3 text-xs font-mono text-secondary"
+                >
+                  OpenAI API
+                </motion.div>
+              </div>
+            </motion.div>
+          </div>
+        </motion.div>
+      </div>
+
+      <TechMarquee />
 
       <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2 }}
+        className="absolute bottom-28 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2"
       >
-        <motion.div variants={itemVariants} className="mb-6">
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm text-accent font-mono">
-            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-            Available for opportunities
-          </span>
-        </motion.div>
-
-        <motion.h1
-          variants={itemVariants}
-          className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mb-6"
-        >
-          <span className="block text-white">Shubham</span>
-          <span className="block gradient-text">Desai</span>
-        </motion.h1>
-
-        <motion.p
-          variants={itemVariants}
-          className="text-lg sm:text-xl md:text-2xl text-slate-400 font-medium mb-4"
-        >
-          {personalInfo.title}
-        </motion.p>
-
-        <motion.p
-          variants={itemVariants}
-          className="text-base sm:text-lg text-slate-500 max-w-3xl mx-auto mb-10 leading-relaxed"
-        >
-          {personalInfo.tagline}
-        </motion.p>
-
+        <span className="text-[10px] font-mono text-slate-600 tracking-widest uppercase">Scroll</span>
         <motion.div
-          variants={itemVariants}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity }}
+          className="w-5 h-8 rounded-full border border-white/15 flex justify-center pt-1.5"
         >
-          <a
-            href="/resume.pdf"
-            download
-            className="group flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-primary to-secondary font-semibold hover:shadow-xl hover:shadow-primary/30 transition-all duration-300 hover:scale-105 w-full sm:w-auto justify-center"
-          >
-            <Download className="w-5 h-5 group-hover:animate-bounce" />
-            Download Resume
-          </a>
-          <a
-            href="#projects"
-            className="group flex items-center gap-2 px-8 py-4 rounded-xl glass font-semibold hover:bg-white/10 transition-all duration-300 w-full sm:w-auto justify-center"
-          >
-            <FolderOpen className="w-5 h-5 text-accent" />
-            View Projects
-          </a>
-          <a
-            href="#contact"
-            className="group flex items-center gap-2 px-8 py-4 rounded-xl glass font-semibold hover:bg-white/10 transition-all duration-300 w-full sm:w-auto justify-center"
-          >
-            <Mail className="w-5 h-5 text-secondary" />
-            Contact Me
-          </a>
+          <div className="w-1 h-2 rounded-full bg-accent/80" />
         </motion.div>
       </motion.div>
-
-      <motion.a
-        href="#about"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1, y: [0, 10, 0] }}
-        transition={{ opacity: { delay: 1.5 }, y: { duration: 2, repeat: Infinity } }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-slate-500 hover:text-accent transition-colors"
-        aria-label="Scroll to about"
-      >
-        <ChevronDown className="w-8 h-8" />
-      </motion.a>
     </section>
   );
 }

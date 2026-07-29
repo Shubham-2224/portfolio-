@@ -2,55 +2,69 @@ import { motion } from "framer-motion";
 import { skills } from "../data/portfolio";
 import { SectionHeading, FadeIn } from "./ui/SectionHeading";
 
-const categoryColors = {
-  Programming: "from-blue-500/20 to-blue-600/10 border-blue-500/30",
-  "Data Science": "from-emerald-500/20 to-emerald-600/10 border-emerald-500/30",
-  "Machine Learning": "from-purple-500/20 to-purple-600/10 border-purple-500/30",
-  "Computer Vision": "from-orange-500/20 to-orange-600/10 border-orange-500/30",
-  "NLP & Generative AI": "from-cyan-500/20 to-cyan-600/10 border-cyan-500/30",
-  MLOps: "from-pink-500/20 to-pink-600/10 border-pink-500/30",
-  "Cloud & DevOps": "from-amber-500/20 to-amber-600/10 border-amber-500/30",
+const categoryMeta = {
+  Programming: { color: "from-blue-600/30 to-blue-900/20", accent: "text-blue-400" },
+  "Data Science": { color: "from-emerald-600/30 to-emerald-900/20", accent: "text-emerald-400" },
+  "Machine Learning": { color: "from-purple-600/30 to-purple-900/20", accent: "text-purple-400" },
+  "Computer Vision": { color: "from-orange-600/30 to-orange-900/20", accent: "text-orange-400" },
+  "NLP & Generative AI": { color: "from-cyan-600/30 to-cyan-900/20", accent: "text-cyan-400" },
+  MLOps: { color: "from-pink-600/30 to-pink-900/20", accent: "text-pink-400" },
+  "Cloud & DevOps": { color: "from-amber-600/30 to-amber-900/20", accent: "text-amber-400" },
 };
 
 export default function Skills() {
   return (
-    <section id="skills" className="relative py-24 md:py-32">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="skills" className="relative py-28 md:py-36">
+      <div className="absolute inset-0 section-divider top-0" />
+
+      <div className="section-container">
         <SectionHeading
+          number="03"
           subtitle="Skills"
-          title="Technical Expertise"
-          description="A comprehensive toolkit for building intelligent AI-powered solutions"
+          title="Technical Arsenal"
+          description="End-to-end expertise spanning data pipelines, model development, and production deployment."
         />
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {skills.map((skillGroup, index) => (
-            <FadeIn key={skillGroup.category} delay={index * 0.1}>
-              <motion.div
-                whileHover={{ y: -8, scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 300 }}
-                className={`glass rounded-2xl p-6 h-full bg-gradient-to-br ${
-                  categoryColors[skillGroup.category] || "from-primary/20 to-secondary/10 border-primary/30"
-                } border hover:shadow-xl hover:shadow-primary/10 transition-shadow duration-300`}
-              >
-                <h3 className="text-lg font-bold mb-4 gradient-text">{skillGroup.category}</h3>
-                <div className="flex flex-wrap gap-2">
-                  {skillGroup.items.map((item, i) => (
-                    <motion.span
-                      key={item}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: index * 0.05 + i * 0.05 }}
-                      whileHover={{ scale: 1.1 }}
-                      className="px-3 py-1.5 rounded-lg bg-white/5 text-sm text-slate-300 hover:bg-white/10 hover:text-white transition-colors cursor-default"
-                    >
-                      {item}
-                    </motion.span>
-                  ))}
-                </div>
-              </motion.div>
-            </FadeIn>
-          ))}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {skills.map((skillGroup, index) => {
+            const meta = categoryMeta[skillGroup.category] || {
+              color: "from-primary/30 to-secondary/20",
+              accent: "text-primary",
+            };
+
+            return (
+              <FadeIn key={skillGroup.category} delay={index * 0.08}>
+                <motion.div
+                  whileHover={{ y: -6 }}
+                  className={`glass-card rounded-2xl p-6 h-full bg-gradient-to-br ${meta.color} relative overflow-hidden group`}
+                >
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full blur-2xl group-hover:bg-white/10 transition-colors" />
+
+                  <div className="relative">
+                    <div className="flex items-center justify-between mb-5">
+                      <h3 className={`font-display font-bold text-lg ${meta.accent}`}>
+                        {skillGroup.category}
+                      </h3>
+                      <span className="text-[10px] font-mono text-slate-600">
+                        {String(skillGroup.items.length).padStart(2, "0")}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2">
+                      {skillGroup.items.map((item) => (
+                        <span
+                          key={item}
+                          className="px-3 py-1.5 rounded-lg bg-black/25 border border-white/6 text-xs text-slate-300 hover:border-white/15 hover:text-white transition-all"
+                        >
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              </FadeIn>
+            );
+          })}
         </div>
       </div>
     </section>

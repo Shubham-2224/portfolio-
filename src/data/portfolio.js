@@ -1,13 +1,14 @@
 export const personalInfo = {
   name: "Shubham Desai",
-  title: "AI & Data Science Engineer | Python Developer | Generative AI Developer",
-  tagline: "Building Intelligent Solutions with AI, Machine Learning & Generative AI",
+  profileImage: "/profile-image.png",
+  title: "AI Engineer | Data Science & Generative AI Specialist",
+  tagline: "I design and deploy production-ready AI solutions that improve automation, decision-making, and business outcomes.",
   email: "desaishubham248@gmail.com",
   phone: "+91 7219429987",
   github: "Shubham-2224",
   githubUrl: "https://github.com/Shubham-2224",
   about:
-    "I am an Artificial Intelligence and Data Science Engineer with expertise in Python, Machine Learning, Deep Learning, NLP, Computer Vision, Generative AI, and Cloud Deployment. Passionate about developing intelligent solutions that automate workflows, extract insights from data, and leverage Large Language Models to solve real-world business challenges.",
+    "AI and Data Science Engineer with hands-on experience in Python, Machine Learning, Deep Learning, NLP, Computer Vision, Generative AI, and cloud deployment. I focus on building practical AI systems that automate workflows, surface actionable insights, and solve real business challenges with measurable impact.",
 };
 
 export const education = [
@@ -62,12 +63,12 @@ export const experience = [
     company: "Coreline IT Solution",
     period: "June 2025 – Present",
     achievements: [
-      "Developed LLM-based AI applications",
-      "Integrated OpenAI APIs",
-      "Built intelligent document processing systems",
-      "Improved workflow automation by 40%",
-      "Deployed AI services on AWS",
-      "Developed REST API-based AI systems",
+      "Engineered LLM-powered AI applications for business automation use cases",
+      "Integrated OpenAI APIs into production workflows and internal tools",
+      "Built intelligent document processing pipelines for faster data extraction",
+      "Improved operational workflow automation by 40%",
+      "Deployed AI services on AWS with scalable API architecture",
+      "Developed REST API-based AI systems for model integration",
     ],
   },
   {
@@ -75,10 +76,10 @@ export const experience = [
     company: "Dhoot Automation Systems",
     period: "January 2025 – June 2025",
     achievements: [
-      "Built Power BI dashboards",
-      "Created Tableau reports",
-      "Analysed production datasets of 10,000+ records",
-      "Improved reporting efficiency by 30%",
+      "Developed interactive Power BI dashboards for production monitoring",
+      "Created Tableau reports for stakeholder decision support",
+      "Analyzed production datasets of 10,000+ records to identify trends and bottlenecks",
+      "Improved reporting efficiency by 30% through structured dashboard workflows",
     ],
   },
 ];
@@ -87,7 +88,7 @@ export const projects = [
   {
     title: "Voter Data Extraction Using Python",
     description:
-      "OCR-based automated voter data extraction system using Python and OpenCV with multilingual text recognition.",
+      "OCR-driven voter data extraction system using Python and OpenCV with multilingual text recognition and high-accuracy parsing.",
     features: ["OCR Automation", "OpenCV Processing", "Multilingual Recognition", "90%+ Accuracy"],
     github: "https://github.com/Shubham-2224/maharashtra-voter-list-extraction-.git",
     gradient: "from-indigo-500/20 to-cyan-500/20",
@@ -96,7 +97,7 @@ export const projects = [
   {
     title: "Real-Time Web Scraping System",
     description:
-      "Automated live web scraping solution with real-time data updates and Excel reporting.",
+      "Automated real-time web scraping pipeline with scheduled collection, live updates, and export-ready Excel reporting.",
     features: ["Beautiful Soup", "Scheduler Automation", "Live Updates", "Excel Integration"],
     github: "https://github.com/Shubham-2224/DPBoss-Live-result-.git",
     gradient: "from-purple-500/20 to-pink-500/20",
@@ -105,7 +106,7 @@ export const projects = [
   {
     title: "AI Text-to-Image Generator",
     description:
-      "Prompt-based image generation platform using Hugging Face Diffusion Models.",
+      "Prompt-based image generation application built on Hugging Face diffusion models with iterative prompt refinement.",
     features: ["Stable Diffusion", "Prompt Engineering", "Dynamic Prompt Refinement", "AI Image Generation"],
     github: "https://github.com/Shubham-2224/text-to-image-genration-ai-model.git",
     gradient: "from-violet-500/20 to-amber-500/20",

@@ -2,23 +2,36 @@ import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { useEffect, useState } from "react";
 
-export function SectionHeading({ subtitle, title, description }) {
+export function SectionHeading({ subtitle, title, description, number }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.6 }}
-      className="text-center mb-16"
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+      className="mb-16 md:mb-20"
     >
-      <span className="text-accent font-mono text-sm tracking-widest uppercase mb-3 block">
-        {subtitle}
-      </span>
-      <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-        <span className="gradient-text">{title}</span>
+      <div className="flex items-center gap-4 mb-6">
+        {number && (
+          <span className="font-mono text-xs text-primary/60 tracking-widest">
+            {number}
+          </span>
+        )}
+        <div className="h-px flex-1 max-w-[60px] bg-gradient-to-r from-primary/60 to-transparent" />
+        <span className="text-accent/90 font-mono text-xs tracking-[0.2em] uppercase">
+          {subtitle}
+        </span>
+        <div className="h-px flex-1 bg-gradient-to-l from-primary/30 to-transparent" />
+      </div>
+
+      <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-5">
+        <span className="gradient-text-warm">{title}</span>
       </h2>
+
       {description && (
-        <p className="text-slate-400 max-w-2xl mx-auto text-lg">{description}</p>
+        <p className="text-slate-400 max-w-2xl text-base md:text-lg leading-relaxed">
+          {description}
+        </p>
       )}
     </motion.div>
   );
@@ -57,18 +70,18 @@ export function AnimatedCounter({ value, suffix = "", duration = 2 }) {
 
 export function FadeIn({ children, delay = 0, className = "", direction = "up" }) {
   const directions = {
-    up: { y: 40, x: 0 },
-    down: { y: -40, x: 0 },
-    left: { x: 40, y: 0 },
-    right: { x: -40, y: 0 },
+    up: { y: 50, x: 0 },
+    down: { y: -50, x: 0 },
+    left: { x: 50, y: 0 },
+    right: { x: -50, y: 0 },
   };
 
   return (
     <motion.div
       initial={{ opacity: 0, ...directions[direction] }}
       whileInView={{ opacity: 1, x: 0, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.6, delay }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
       className={className}
     >
       {children}

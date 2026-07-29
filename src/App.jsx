@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import LoadingScreen from "./components/LoadingScreen";
+import AmbientBackground from "./components/ui/AmbientBackground";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
@@ -22,7 +23,8 @@ export default function App() {
   return (
     <>
       {loading && <LoadingScreen onComplete={handleLoadingComplete} />}
-      <div className={`min-h-screen bg-background ${loading ? "overflow-hidden h-screen" : ""}`}>
+      <AmbientBackground />
+      <div className={`relative min-h-screen ${loading ? "overflow-hidden h-screen" : ""}`}>
         <Navbar />
         <main>
           <Hero />

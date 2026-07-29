@@ -1,124 +1,105 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 
+const bootLines = [
+  "Loading neural networks...",
+  "Initializing TensorFlow...",
+  "Connecting OpenAI API...",
+  "Deploying portfolio...",
+];
+
 export default function LoadingScreen({ onComplete }) {
+  const prefersReducedMotion = useReducedMotion();
   const [progress, setProgress] = useState(0);
   const [phase, setPhase] = useState("loading");
+  const [bootIndex, setBootIndex] = useState(0);
 
   useEffect(() => {
+    const intervalDelay = prefersReducedMotion ? 24 : 40;
+    const progressStep = prefersReducedMotion ? 5 : 2;
+    const transitionDelay = prefersReducedMotion ? 250 : 700;
+
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
           setPhase("transition");
-          setTimeout(onComplete, 800);
+          setTimeout(onComplete, transitionDelay);
           return 100;
         }
-        return prev + 2;
+        return prev + progressStep;
       });
-    }, 40);
+    }, intervalDelay);
 
     return () => clearInterval(interval);
-  }, [onComplete]);
+  }, [onComplete, prefersReducedMotion]);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setBootIndex((i) => (i + 1) % bootLines.length);
+    }, 600);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <AnimatePresence>
       {phase !== "done" && (
         <motion.div
-          exit={{ opacity: 0, scale: 1.1 }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-background overflow-hidden"
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.7, ease: "easeInOut" }}
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#070b14] overflow-hidden"
         >
-          <div className="absolute inset-0 grid-bg opacity-50" />
-
+          <div className="absolute inset-0 grid-bg opacity-30" />
           <motion.div
-            className="absolute w-96 h-96 rounded-full bg-primary/20 blur-[120px]"
-            animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
+            className="glow-orb absolute w-[500px] h-[500px] bg-primary/25 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+            animate={prefersReducedMotion ? false : { scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
             transition={{ duration: 3, repeat: Infinity }}
           />
-          <motion.div
-            className="absolute w-64 h-64 rounded-full bg-secondary/20 blur-[100px] -translate-x-32"
-            animate={{ scale: [1.2, 1, 1.2], opacity: [0.4, 0.7, 0.4] }}
-            transition={{ duration: 2.5, repeat: Infinity }}
-          />
 
-          <div className="relative z-10 flex flex-col items-center gap-8">
-            <motion.div
-              initial={{ scale: 0, rotate: -180 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{ duration: 0.8, type: "spring" }}
-              className="relative"
-            >
-              <div className="w-20 h-20 rounded-2xl glass gradient-border flex items-center justify-center">
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                  className="w-10 h-10 border-2 border-transparent border-t-accent border-r-primary rounded-full"
-                />
-              </div>
-              <motion.div
-                className="absolute -inset-4 border border-primary/30 rounded-3xl"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-              />
-            </motion.div>
-
+          <div className="relative z-10 w-full max-w-md px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="text-center"
+              className="text-center mb-10"
             >
-              <h1 className="font-mono text-xl md:text-2xl font-semibold mb-2">
+              <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center font-display font-black text-xl">
+                SD
+              </div>
+              <h1 className="font-display text-2xl font-bold mb-2">
                 <span className="gradient-text">Initializing AI Portfolio</span>
-                <motion.span
-                  animate={{ opacity: [1, 0, 1] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                >
-                  ...
-                </motion.span>
               </h1>
-              <p className="text-slate-500 font-mono text-sm">
-                Loading neural networks &amp; datasets
+              <p className="font-mono text-xs text-slate-500 h-4">
+                {bootLines[bootIndex]}
               </p>
             </motion.div>
 
-            <div className="w-64 md:w-80">
-              <div className="h-1.5 bg-surface rounded-full overflow-hidden">
+            <div className="glass-card rounded-2xl p-6">
+              <div className="flex justify-between text-xs font-mono text-slate-500 mb-3">
+                <span>SYSTEM BOOT</span>
+                <span className="text-accent">{progress}%</span>
+              </div>
+              <div className="h-1.5 bg-black/40 rounded-full overflow-hidden mb-4">
                 <motion.div
                   className="h-full bg-gradient-to-r from-primary via-secondary to-accent rounded-full"
                   style={{ width: `${progress}%` }}
-                  transition={{ duration: 0.1 }}
                 />
               </div>
-              <p className="text-right text-xs text-slate-500 font-mono mt-2">{progress}%</p>
+              <div className="space-y-1 font-mono text-[10px] text-slate-600">
+                {["Python", "TensorFlow", "OpenAI", "AWS"].map((tech, i) => (
+                  <p key={tech} className={progress > (i + 1) * 22 ? "text-accent/70" : ""}>
+                    [{progress > (i + 1) * 22 ? "✓" : "·"}] {tech}
+                  </p>
+                ))}
+              </div>
             </div>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
-              className="flex gap-3 font-mono text-xs text-slate-600"
-            >
-              {["Python", "TensorFlow", "OpenAI", "AWS"].map((tech, i) => (
-                <motion.span
-                  key={tech}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: progress > (i + 1) * 20 ? 1 : 0.3 }}
-                  className={progress > (i + 1) * 20 ? "text-accent" : ""}
-                >
-                  [{tech}]
-                </motion.span>
-              ))}
-            </motion.div>
           </div>
 
           {phase === "transition" && (
             <motion.div
               initial={{ scaleY: 0 }}
               animate={{ scaleY: 1 }}
-              transition={{ duration: 0.6 }}
-              className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/10 to-background origin-top"
+              transition={{ duration: 0.5 }}
+              className="absolute inset-0 bg-background origin-bottom"
             />
           )}
         </motion.div>

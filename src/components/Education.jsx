@@ -5,58 +5,45 @@ import { SectionHeading, FadeIn } from "./ui/SectionHeading";
 
 export default function Education() {
   return (
-    <section id="education" className="relative py-24 md:py-32">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none" />
+    <section id="education" className="relative py-28 md:py-36">
+      <div className="section-container">
+        <SectionHeading
+          number="02"
+          subtitle="Education"
+          title="Academic Foundation"
+          description="Strong technical foundation in AI, data science, and computer engineering."
+        />
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <SectionHeading subtitle="Education" title="Academic Journey" />
-
-        <div className="relative">
-          <div className="absolute left-6 md:left-1/2 md:-translate-x-px top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-secondary to-accent" />
-
+        <div className="grid md:grid-cols-2 gap-6 max-w-5xl">
           {education.map((item, index) => (
-            <FadeIn key={item.degree} delay={index * 0.2}>
-              <div
-                className={`relative flex items-start gap-6 mb-12 last:mb-0 ${
-                  index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-                }`}
+            <FadeIn key={item.degree} delay={index * 0.12}>
+              <motion.div
+                whileHover={{ y: -6 }}
+                className="glass-card rounded-2xl p-8 gradient-border h-full relative overflow-hidden group"
               >
-                <div className="hidden md:block md:w-1/2" />
+                <div className="absolute -top-12 -right-12 w-40 h-40 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/15 transition-colors" />
 
-                <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  className={`relative flex-1 md:w-1/2 ml-14 md:ml-0 ${
-                    index % 2 === 0 ? "md:pr-12 md:text-right" : "md:pl-12"
-                  }`}
-                >
-                  <div className="glass rounded-2xl p-6 md:p-8 gradient-border hover:shadow-lg hover:shadow-primary/10 transition-shadow duration-300">
-                    <div
-                      className={`flex items-center gap-3 mb-4 ${
-                        index % 2 === 0 ? "md:justify-end" : ""
-                      }`}
-                    >
-                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shrink-0">
-                        <GraduationCap className="w-5 h-5 text-white" />
-                      </div>
-                      <span className="text-accent font-mono text-sm">{item.period}</span>
+                <div className="relative">
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/30 to-accent/20 flex items-center justify-center border border-white/8">
+                      <GraduationCap className="w-6 h-6 text-accent" />
                     </div>
-
-                    <h3 className="text-xl font-bold mb-2">{item.degree}</h3>
-                    <p className="text-slate-400 mb-4">{item.institution}</p>
-
-                    <div
-                      className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 text-accent text-sm font-medium ${
-                        index % 2 === 0 ? "md:float-right" : ""
-                      }`}
-                    >
-                      <Award className="w-4 h-4" />
-                      {item.score}
-                    </div>
+                    <span className="font-mono text-xs text-slate-500 px-3 py-1.5 rounded-lg bg-white/5">
+                      {item.period}
+                    </span>
                   </div>
-                </motion.div>
 
-                <div className="absolute left-6 md:left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-gradient-to-r from-primary to-accent border-4 border-background z-10" />
-              </div>
+                  <h3 className="font-display text-xl font-bold mb-2 leading-snug">
+                    {item.degree}
+                  </h3>
+                  <p className="text-slate-400 text-sm mb-6">{item.institution}</p>
+
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+                    <Award className="w-4 h-4 text-emerald-400" />
+                    <span className="text-sm font-semibold text-emerald-400">{item.score}</span>
+                  </div>
+                </div>
+              </motion.div>
             </FadeIn>
           ))}
         </div>

@@ -1,89 +1,100 @@
 import { motion } from "framer-motion";
-import { ExternalLink, Scan, Globe, ImageIcon } from "lucide-react";
+import { ExternalLink, Scan, Globe, ImageIcon, ArrowUpRight } from "lucide-react";
 import GitHubIcon from "./ui/GitHubIcon";
 import { projects } from "../data/portfolio";
 import { SectionHeading, FadeIn } from "./ui/SectionHeading";
 
-const iconMap = {
-  scan: Scan,
-  globe: Globe,
-  image: ImageIcon,
-};
+const iconMap = { scan: Scan, globe: Globe, image: ImageIcon };
 
 export default function Projects() {
   return (
-    <section id="projects" className="relative py-24 md:py-32">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="projects" className="relative py-28 md:py-36">
+      <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none" />
+
+      <div className="section-container relative">
         <SectionHeading
+          number="05"
           subtitle="Projects"
-          title="Featured Work"
-          description="AI-powered solutions solving real-world problems"
+          title="Selected Work"
+          description="Production-grade AI systems built to solve real business challenges."
         />
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="space-y-8">
           {projects.map((project, index) => {
             const Icon = iconMap[project.icon] || Scan;
+            const isEven = index % 2 === 0;
 
             return (
-              <FadeIn key={project.title} delay={index * 0.15}>
+              <FadeIn key={project.title} delay={index * 0.1}>
                 <motion.article
-                  whileHover={{ y: -10 }}
-                  className="group relative glass rounded-2xl overflow-hidden h-full flex flex-col gradient-border hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500"
+                  whileHover={{ scale: 1.005 }}
+                  className="group glass-card rounded-3xl overflow-hidden gradient-border border border-white/5"
                 >
-                  <div className={`h-48 bg-gradient-to-br ${project.gradient} relative overflow-hidden`}>
-                    <div className="absolute inset-0 grid-bg opacity-50" />
-                    <motion.div
-                      className="absolute inset-0 flex items-center justify-center"
-                      whileHover={{ scale: 1.1 }}
-                      transition={{ type: "spring" }}
+                  <div className="grid md:grid-cols-2">
+                    <div
+                      className={`relative h-64 md:h-auto min-h-[280px] bg-gradient-to-br ${project.gradient} overflow-hidden ${
+                        isEven ? "md:order-1" : "md:order-2"
+                      }`}
                     >
-                      <div className="w-20 h-20 rounded-2xl glass flex items-center justify-center">
-                        <Icon className="w-10 h-10 text-accent" />
-                      </div>
-                    </motion.div>
+                      <div className="absolute inset-0 grid-bg opacity-60" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
 
-                    <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="absolute top-6 left-6 font-mono text-6xl font-black text-white/5">
+                        {String(index + 1).padStart(2, "0")}
+                      </div>
+
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <motion.div
+                          whileHover={{ rotate: 5, scale: 1.05 }}
+                          className="w-24 h-24 rounded-2xl glass-card flex items-center justify-center border border-white/10"
+                        >
+                          <Icon className="w-12 h-12 text-accent" />
+                        </motion.div>
+                      </div>
+                    </div>
+
+                    <div className={`p-8 md:p-10 flex flex-col justify-center ${isEven ? "md:order-2" : "md:order-1"}`}>
+                      <div className="flex items-start justify-between gap-4 mb-4">
+                        <h3 className="font-display text-2xl md:text-3xl font-bold group-hover:text-accent transition-colors">
+                          {project.title}
+                        </h3>
+                        <a
+                          href={project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="shrink-0 p-2.5 rounded-xl glass border border-white/8 hover:border-primary/40 hover:bg-primary/10 transition-all"
+                          aria-label="View on GitHub"
+                        >
+                          <ArrowUpRight className="w-5 h-5" />
+                        </a>
+                      </div>
+
+                      <p className="text-slate-400 leading-relaxed mb-6">
+                        {project.description}
+                      </p>
+
+                      <div className="flex flex-wrap gap-2 mb-8">
+                        {project.features.map((feature) => (
+                          <span
+                            key={feature}
+                            className="px-3 py-1.5 rounded-lg bg-primary/10 border border-primary/20 text-primary text-xs font-medium"
+                          >
+                            {feature}
+                          </span>
+                        ))}
+                      </div>
+
                       <a
                         href={project.github}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 rounded-lg glass hover:bg-white/20 transition-colors"
-                        aria-label="View on GitHub"
+                        className="inline-flex items-center gap-2 text-sm font-semibold text-slate-300 hover:text-white transition-colors group/link w-fit"
                       >
-                        <ExternalLink className="w-5 h-5" />
+                        <GitHubIcon className="w-4 h-4" />
+                        View Source Code
+                        <ExternalLink className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover/link:opacity-100 group-hover/link:translate-x-0 transition-all" />
                       </a>
                     </div>
-                  </div>
-
-                  <div className="p-6 flex flex-col flex-1">
-                    <h3 className="text-xl font-bold mb-3 group-hover:text-accent transition-colors">
-                      {project.title}
-                    </h3>
-                    <p className="text-slate-400 text-sm leading-relaxed mb-5 flex-1">
-                      {project.description}
-                    </p>
-
-                    <div className="flex flex-wrap gap-2 mb-6">
-                      {project.features.map((feature) => (
-                        <span
-                          key={feature}
-                          className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium"
-                        >
-                          {feature}
-                        </span>
-                      ))}
-                    </div>
-
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-sm font-semibold text-accent hover:text-white transition-colors group/link"
-                    >
-                      <GitHubIcon className="w-4 h-4" />
-                      View on GitHub
-                      <ExternalLink className="w-3 h-3 opacity-0 group-hover/link:opacity-100 transition-opacity" />
-                    </a>
                   </div>
                 </motion.article>
               </FadeIn>
