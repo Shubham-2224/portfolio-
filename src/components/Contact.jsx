@@ -1,185 +1,153 @@
-import { motion } from "framer-motion";
 import { useState } from "react";
-import { Send, Mail, Phone, MapPin, CheckCircle, MessageSquare } from "lucide-react";
-import GitHubIcon from "./ui/GitHubIcon";
+import { ArrowUpRight, Check, Copy, MapPin, Phone, Send } from "lucide-react";
 import { personalInfo } from "../data/portfolio";
-import { SectionHeading, FadeIn } from "./ui/SectionHeading";
+import GitHubIcon from "./ui/GitHubIcon";
+import { Reveal, SplitWords } from "./ui/Motion";
 
-const contactMethods = [
-  {
-    icon: Mail,
-    label: "Email",
-    value: personalInfo.email,
-    href: `mailto:${personalInfo.email}`,
-    color: "from-primary/20 to-primary/5",
-  },
-  {
-    icon: Phone,
-    label: "Phone",
-    value: personalInfo.phone,
-    href: `tel:${personalInfo.phone.replace(/\s/g, "")}`,
-    color: "from-secondary/20 to-secondary/5",
-  },
-  {
-    icon: MapPin,
-    label: "Location",
-    value: "Aurangabad, Maharashtra",
-    color: "from-accent/20 to-accent/5",
-  },
-];
+function CopyEmail() {
+  const [copied, setCopied] = useState(false);
 
-export default function Contact() {
-  const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" });
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const mailtoLink = `mailto:${personalInfo.email}?subject=${encodeURIComponent(
-      formData.subject || "Portfolio Contact"
-    )}&body=${encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`
-    )}`;
-    window.location.href = mailtoLink;
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(personalInfo.email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      window.location.href = `mailto:${personalInfo.email}`;
+    }
   };
 
   return (
-    <section id="contact" className="relative py-28 md:py-36">
-      <div className="absolute inset-0 bg-gradient-to-t from-primary/8 via-transparent to-transparent pointer-events-none" />
-      <div className="absolute inset-0 section-divider top-0" />
+    <div className="flex flex-wrap items-center gap-3">
+      <a
+        href={`mailto:${personalInfo.email}`}
+        className="link-underline break-all font-display text-2xl font-semibold tracking-tight sm:text-3xl"
+      >
+        {personalInfo.email}
+      </a>
+      <button
+        type="button"
+        onClick={copy}
+        className="inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-full border border-line px-3 font-mono text-xs text-muted transition-colors hover:border-line-strong hover:text-fg"
+      >
+        {copied ? <Check className="h-3.5 w-3.5 text-signal" /> : <Copy className="h-3.5 w-3.5" />}
+        <span aria-live="polite">{copied ? "Copied" : "Copy"}</span>
+      </button>
+    </div>
+  );
+}
 
-      <div className="section-container relative">
-        <SectionHeading
-          number="08"
-          subtitle="Contact"
-          title="Let's Build Together"
-          description="Ready to discuss your next AI project? I'd love to hear from you."
-        />
+const inputs = [
+  { id: "name", label: "Name", type: "text", placeholder: "Your name", autoComplete: "name" },
+  { id: "email", label: "Email", type: "email", placeholder: "you@company.com", autoComplete: "email" },
+];
 
-        <div className="grid lg:grid-cols-12 gap-8">
-          <FadeIn direction="left" className="lg:col-span-5">
-            <div className="space-y-4 mb-8">
-              {contactMethods.map((method) => (
-                <motion.div
-                  key={method.label}
-                  whileHover={{ x: 4 }}
-                  className={`glass-card rounded-2xl p-5 bg-gradient-to-r ${method.color}`}
-                >
-                  {method.href ? (
-                    <a href={method.href} className="flex items-center gap-4 group">
-                      <div className="w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center border border-white/8">
-                        <method.icon className="w-5 h-5 text-accent" />
-                      </div>
-                      <div>
-                        <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-0.5">
-                          {method.label}
-                        </p>
-                        <p className="text-sm text-slate-200 group-hover:text-white transition-colors">
-                          {method.value}
-                        </p>
-                      </div>
-                    </a>
-                  ) : (
-                    <div className="flex items-center gap-4">
-                      <div className="w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center border border-white/8">
-                        <method.icon className="w-5 h-5 text-accent" />
-                      </div>
-                      <div>
-                        <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-0.5">
-                          {method.label}
-                        </p>
-                        <p className="text-sm text-slate-200">{method.value}</p>
-                      </div>
-                    </div>
-                  )}
-                </motion.div>
-              ))}
-            </div>
+export default function Contact() {
+  const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
+  const [sent, setSent] = useState(false);
+  const update = (event) => setForm((prev) => ({ ...prev, [event.target.name]: event.target.value }));
 
-            <div className="flex gap-3">
-              <a
-                href={personalInfo.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 btn-secondary flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-semibold"
-              >
-                <GitHubIcon className="w-4 h-4" />
-                GitHub
-              </a>
-              <a
-                href={`mailto:${personalInfo.email}`}
-                className="flex-1 btn-primary flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-semibold"
-              >
-                <Mail className="w-4 h-4" />
-                Email Me
-              </a>
-            </div>
-          </FadeIn>
+  const onSubmit = (event) => {
+    event.preventDefault();
+    const subject = encodeURIComponent(form.subject || "Portfolio enquiry");
+    const body = encodeURIComponent(`${form.message}\n\n— ${form.name}\n${form.email}`);
+    window.location.href = `mailto:${personalInfo.email}?subject=${subject}&body=${body}`;
+    setSent(true);
+    setTimeout(() => setSent(false), 4000);
+  };
 
-          <FadeIn direction="right" delay={0.15} className="lg:col-span-7">
-            <form onSubmit={handleSubmit} className="glass-card rounded-3xl p-8 md:p-10 gradient-border">
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
-                  <MessageSquare className="w-5 h-5 text-primary" />
-                </div>
-                <div>
-                  <h3 className="font-display font-bold">Send a Message</h3>
-                  <p className="text-xs text-slate-500">I'll get back to you within 24 hours</p>
-                </div>
+  return (
+    <section id="contact" className="section border-t border-line overflow-hidden">
+      <div
+        aria-hidden="true"
+        className="absolute left-1/2 top-0 -z-10 h-[32rem] w-[60rem] max-w-none -translate-x-1/2 rounded-full bg-signal/[0.07] blur-3xl"
+      />
+      <div className="shell">
+        <div className="grid grid-cols-1 gap-14 lg:grid-cols-12 lg:gap-12">
+          <div className="lg:col-span-6">
+            <Reveal className="mb-6 flex items-center gap-3">
+              <span className="eyebrow text-signal">06</span>
+              <span className="h-px w-10 bg-line-strong" />
+              <span className="eyebrow">Contact</span>
+            </Reveal>
+            <h2 className="text-[clamp(2.5rem,5.6vw,4.5rem)] font-semibold leading-[1.02]">
+              <SplitWords
+                onView
+                text={[{ text: "Let’s build something" }, { text: "intelligent.", accent: true }]}
+              />
+            </h2>
+            <Reveal delay={0.15}>
+              <p className="mt-7 max-w-md text-lg leading-relaxed text-muted">
+                Hiring for an AI or data role, or have a project in mind? Email is the fastest way to reach me.
+              </p>
+            </Reveal>
+
+            <Reveal delay={0.25} className="mt-10">
+              <CopyEmail />
+              <ul className="mt-8 space-y-4 text-muted">
+                <li>
+                  <a href={`tel:${personalInfo.phone.replace(/\s/g, "")}`} className="inline-flex items-center gap-3 transition-colors hover:text-fg">
+                    <Phone className="h-4 w-4 text-signal" aria-hidden="true" />
+                    {personalInfo.phone}
+                  </a>
+                </li>
+                <li className="flex items-center gap-3">
+                  <MapPin className="h-4 w-4 text-signal" aria-hidden="true" />
+                  {personalInfo.location}, {personalInfo.country} · {personalInfo.workMode}
+                </li>
+                <li>
+                  <a
+                    href={personalInfo.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-3 transition-colors hover:text-fg"
+                  >
+                    <GitHubIcon className="h-4 w-4 text-signal" />
+                    github.com/{personalInfo.github}
+                    <ArrowUpRight className="h-3.5 w-3.5 text-dim" aria-hidden="true" />
+                  </a>
+                </li>
+              </ul>
+            </Reveal>
+          </div>
+
+          <Reveal delay={0.1} className="lg:col-span-6">
+            <form onSubmit={onSubmit} className="card spot p-6 sm:p-9">
+              <div className="grid gap-5 sm:grid-cols-2">
+                {inputs.map((input) => (
+                  <div key={input.id}>
+                    <label htmlFor={input.id} className="eyebrow mb-2 block">
+                      {input.label}
+                    </label>
+                    <input
+                      {...input}
+                      name={input.id}
+                      required
+                      value={form[input.id]}
+                      onChange={update}
+                      className="field"
+                    />
+                  </div>
+                ))}
               </div>
 
-              <div className="grid sm:grid-cols-2 gap-5 mb-5">
-                <div>
-                  <label htmlFor="name" className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-2">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    required
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="John Doe"
-                    className="w-full px-4 py-3.5 rounded-xl bg-black/30 border border-white/8 focus:border-primary/50 focus:ring-1 focus:ring-primary/30 outline-none transition-all text-white placeholder:text-slate-600 text-sm"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-2">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="john@company.com"
-                    className="w-full px-4 py-3.5 rounded-xl bg-black/30 border border-white/8 focus:border-primary/50 focus:ring-1 focus:ring-primary/30 outline-none transition-all text-white placeholder:text-slate-600 text-sm"
-                  />
-                </div>
-              </div>
-
-              <div className="mb-5">
-                <label htmlFor="subject" className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-2">
+              <div className="mt-5">
+                <label htmlFor="subject" className="eyebrow mb-2 block">
                   Subject
                 </label>
                 <input
-                  type="text"
                   id="subject"
                   name="subject"
-                  required
-                  value={formData.subject}
-                  onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                  placeholder="AI Project Collaboration"
-                  className="w-full px-4 py-3.5 rounded-xl bg-black/30 border border-white/8 focus:border-primary/50 focus:ring-1 focus:ring-primary/30 outline-none transition-all text-white placeholder:text-slate-600 text-sm"
+                  type="text"
+                  value={form.subject}
+                  onChange={update}
+                  placeholder="AI engineer role, project, collaboration…"
+                  className="field"
                 />
               </div>
 
-              <div className="mb-8">
-                <label htmlFor="message" className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-2">
+              <div className="mt-5">
+                <label htmlFor="message" className="eyebrow mb-2 block">
                   Message
                 </label>
                 <textarea
@@ -187,35 +155,22 @@ export default function Contact() {
                   name="message"
                   required
                   rows={5}
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  placeholder="Tell me about your project requirements..."
-                  className="w-full px-4 py-3.5 rounded-xl bg-black/30 border border-white/8 focus:border-primary/50 focus:ring-1 focus:ring-primary/30 outline-none transition-all text-white placeholder:text-slate-600 resize-none text-sm"
+                  value={form.message}
+                  onChange={update}
+                  placeholder="Tell me a little about what you need."
+                  className="field resize-y min-h-32"
                 />
               </div>
 
-              <motion.button
-                type="submit"
-                whileHover={{ scale: 1.01 }}
-                whileTap={{ scale: 0.99 }}
-                className="w-full btn-primary flex items-center justify-center gap-2 py-4 rounded-xl font-semibold text-sm"
-              >
-                <span className="flex items-center justify-center gap-2" aria-live="polite" role="status">
-                  {submitted ? (
-                    <>
-                      <CheckCircle className="w-4 h-4" />
-                      Opening Email Client...
-                    </>
-                  ) : (
-                    <>
-                      <Send className="w-4 h-4" />
-                      Send Message
-                    </>
-                  )}
-                </span>
-              </motion.button>
+              <button type="submit" className="btn btn-primary mt-7 w-full">
+                {sent ? <Check className="h-4 w-4" aria-hidden="true" /> : <Send className="h-4 w-4" aria-hidden="true" />}
+                <span aria-live="polite">{sent ? "Check your email app" : "Send message"}</span>
+              </button>
+              <p className="mt-4 text-center text-xs text-dim">
+                Opens your email app with the message filled in — nothing is stored on this site.
+              </p>
             </form>
-          </FadeIn>
+          </Reveal>
         </div>
       </div>
     </section>

@@ -1,195 +1,131 @@
 import { motion } from "framer-motion";
-import { Download, ArrowRight, MapPin, Sparkles } from "lucide-react";
-import { personalInfo } from "../data/portfolio";
+import { ArrowRight, ArrowUpRight, FileDown } from "lucide-react";
+import { metrics, personalInfo } from "../data/portfolio";
+import NeuralField from "./ui/NeuralField";
+import PipelineConsole from "./ui/PipelineConsole";
 import TechMarquee from "./ui/TechMarquee";
+import GitHubIcon from "./ui/GitHubIcon";
+import { Counter, SplitWords } from "./ui/Motion";
 
-const stats = [
-  { value: "3+", label: "AI Projects" },
-  { value: "2+", label: "Years Experience" },
-  { value: "90%+", label: "OCR Accuracy" },
-];
+const EASE = [0.16, 1, 0.3, 1];
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.12, delayChildren: 0.2 },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
-};
+const rise = (delay) => ({
+  initial: { opacity: 0, y: 22 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.9, delay, ease: EASE },
+});
 
 export default function Hero() {
   return (
-    <section id="home" className="relative min-h-screen flex flex-col overflow-hidden">
-      <div className="flex-1 flex items-center pt-24 pb-12">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="section-container w-full"
-        >
-          <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-            {/* Left content */}
-            <div className="lg:col-span-7">
-              <motion.div variants={itemVariants} className="mb-8">
-                <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full glass border border-white/8">
-                  <span className="relative flex h-2.5 w-2.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400" />
-                  </span>
-                  <span className="text-sm text-slate-300">Open to AI &amp; Data Science roles</span>
-                </div>
-              </motion.div>
+    <section id="home" className="relative flex min-h-svh flex-col overflow-hidden">
+      <div className="absolute inset-0 -z-10" aria-hidden="true">
+        <div className="aurora absolute inset-x-0 top-0 h-[44rem]" />
+        <div className="absolute inset-0 grid-lines fade-mask opacity-60" />
+        <NeuralField className="absolute inset-0 h-full w-full fade-mask" />
+      </div>
 
-              <motion.div variants={itemVariants} className="mb-6">
-                <p className="text-slate-500 font-mono text-sm mb-4 tracking-wide">
-                  // {personalInfo.title}
-                </p>
-                <h1 className="font-display text-5xl sm:text-6xl md:text-7xl xl:text-8xl font-black tracking-tight leading-[0.95]">
-                  <span className="text-white">Shubham</span>
-                  <br />
-                  <span className="gradient-text">Desai</span>
-                </h1>
-              </motion.div>
-
-              <motion.p
-                variants={itemVariants}
-                className="text-lg md:text-xl text-slate-400 leading-relaxed max-w-xl mb-4 font-medium"
-              >
-                {personalInfo.tagline}
-              </motion.p>
-
-              <motion.p
-                variants={itemVariants}
-                className="text-sm text-slate-500 mb-8 flex items-center gap-2"
-              >
-                <MapPin className="w-4 h-4 text-accent/70" />
-                Aurangabad, Maharashtra · Open to remote & onsite roles
-              </motion.p>
-
-              <motion.div variants={itemVariants} className="flex flex-wrap gap-4 mb-12">
-                <a
-                  href="/resume.pdf"
-                  download
-                  className="btn-primary inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl font-semibold text-sm"
-                >
-                  <Download className="w-4 h-4" />
-                  Download Resume
-                </a>
-                <a
-                  href="#projects"
-                  className="btn-secondary inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl font-semibold text-sm text-slate-200"
-                >
-                  View Projects
-                  <ArrowRight className="w-4 h-4" />
-                </a>
-                <a
-                  href="#contact"
-                  className="btn-secondary inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl font-semibold text-sm text-slate-200"
-                >
-                  Contact Me
-                </a>
-              </motion.div>
-
-              <motion.div
-                variants={itemVariants}
-                className="grid grid-cols-3 gap-4 max-w-md"
-              >
-                {stats.map((stat) => (
-                  <div key={stat.label} className="glass-card rounded-2xl p-4 stat-shine">
-                    <p className="font-display text-2xl md:text-3xl font-bold gradient-text">
-                      {stat.value}
-                    </p>
-                    <p className="text-xs text-slate-500 mt-1">{stat.label}</p>
-                  </div>
-                ))}
-              </motion.div>
-            </div>
-
-            {/* Right visual */}
+      <div className="shell flex flex-1 flex-col justify-center pt-32 pb-14 md:pt-40">
+        <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-12 lg:gap-12">
+          <div className="lg:col-span-7">
             <motion.div
-              variants={itemVariants}
-              className="lg:col-span-5 relative hidden lg:block"
+              {...rise(0.05)}
+              className="mb-8 inline-flex max-w-full items-center gap-3 rounded-full border border-line bg-white/[0.04] py-1.5 pl-1.5 pr-4 backdrop-blur"
             >
-              <div className="relative mx-auto max-w-md">
-                <div className="absolute -inset-8 bg-gradient-to-br from-primary/20 via-secondary/10 to-accent/20 rounded-full blur-3xl" />
+              <img
+                src={personalInfo.profileImageSmall}
+                alt=""
+                width="32"
+                height="32"
+                className="h-8 w-8 shrink-0 rounded-full object-cover object-top"
+              />
+              <span className="hidden whitespace-nowrap text-sm font-medium sm:inline">{personalInfo.name}</span>
+              <span className="hidden h-4 w-px shrink-0 bg-line-strong sm:block" aria-hidden="true" />
+              <span className="flex min-w-0 items-center gap-2 text-sm text-muted">
+                <span className="relative flex h-2 w-2 shrink-0">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70 motion-reduce:hidden" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+                </span>
+                <span className="truncate">{personalInfo.availability}</span>
+              </span>
+            </motion.div>
 
-                <div className="relative glass-card rounded-3xl p-8 gradient-border">
-                  <div className="flex justify-center mb-8">
-                    <div className="profile-ring">
-                      <img
-                        src={personalInfo.profileImage}
-                        alt={`${personalInfo.name} profile`}
-                        className="w-40 h-40 rounded-full object-cover object-center"
-                      />
-                    </div>
-                  </div>
+            <h1 className="text-[clamp(2.4rem,4.7vw,4.1rem)] font-semibold leading-[1.06] tracking-[-0.04em]">
+              <SplitWords
+                delay={0.15}
+                text={[
+                  { text: "AI Engineer building" },
+                  { text: "production LLM systems", accent: true },
+                  { text: "that turn data into decisions." },
+                ]}
+              />
+            </h1>
 
-                  <div className="text-center mb-6">
-                    <h3 className="font-display text-xl font-bold">{personalInfo.name}</h3>
-                    <p className="text-sm text-slate-400 mt-1">{personalInfo.title.split("|")[0].trim()}</p>
-                  </div>
+            <motion.p {...rise(0.6)} className="mt-7 max-w-xl text-lg leading-relaxed text-muted">
+              I’m {personalInfo.firstName} — an {personalInfo.role}. I design LLM applications and
+              document-intelligence pipelines, deploy them on AWS, and build the dashboards that
+              show whether they work.
+            </motion.p>
 
-                  <div className="terminal-window">
-                    <div className="terminal-header">
-                      <span className="terminal-dot bg-red-500/80" />
-                      <span className="terminal-dot bg-yellow-500/80" />
-                      <span className="terminal-dot bg-green-500/80" />
-                      <span className="ml-2 text-xs text-slate-500 font-mono">ai_engineer.py</span>
-                    </div>
-                    <div className="p-4 font-mono text-xs space-y-1.5">
-                      <p><span className="text-purple-400">class</span> <span className="text-yellow-300">AIEngineer</span>:</p>
-                      <p className="pl-4"><span className="text-slate-500">skills</span> = [<span className="text-green-400">"Python"</span>, <span className="text-green-400">"ML"</span>, <span className="text-green-400">"LLMs"</span>]</p>
-                      <p className="pl-4"><span className="text-slate-500">focus</span> = <span className="text-green-400">"Generative AI"</span></p>
-                      <p className="pl-4"><span className="text-purple-400">def</span> <span className="text-blue-400">build</span>(self):</p>
-                      <p className="pl-8"><span className="text-purple-400">return</span> <span className="text-green-400">"intelligent solutions"</span></p>
-                      <p className="text-accent mt-2 flex items-center gap-1">
-                        <Sparkles className="w-3 h-3" /> Ready to deploy
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <motion.div
-                  animate={{ y: [0, -12, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute -top-4 -right-4 glass-card rounded-2xl px-4 py-3 text-xs font-mono text-accent"
-                >
-                  TensorFlow
-                </motion.div>
-                <motion.div
-                  animate={{ y: [0, 10, 0] }}
-                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                  className="absolute -bottom-2 -left-6 glass-card rounded-2xl px-4 py-3 text-xs font-mono text-secondary"
-                >
-                  OpenAI API
-                </motion.div>
-              </div>
+            <motion.div {...rise(0.75)} className="mt-9 flex flex-wrap items-center gap-3">
+              <a href="#work" className="btn btn-primary">
+                View my work
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </a>
+              <a href="#contact" className="btn btn-ghost">
+                Get in touch
+              </a>
+              {personalInfo.resumeUrl && (
+                <a href={personalInfo.resumeUrl} download className="btn btn-ghost">
+                  <FileDown className="h-4 w-4" aria-hidden="true" />
+                  Résumé
+                </a>
+              )}
+              <a
+                href={personalInfo.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-ghost"
+              >
+                <GitHubIcon className="h-4 w-4" />
+                GitHub
+                <ArrowUpRight className="h-3.5 w-3.5 text-dim" aria-hidden="true" />
+              </a>
             </motion.div>
           </div>
-        </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 36, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 1.2, delay: 0.4, ease: EASE }}
+            className="relative lg:col-span-5"
+          >
+            <div
+              className="absolute -inset-8 -z-10 rounded-[3rem] bg-gradient-to-br from-signal/25 via-transparent to-iris/20 blur-3xl"
+              aria-hidden="true"
+            />
+            <PipelineConsole />
+          </motion.div>
+        </div>
+
+        <motion.dl
+          {...rise(0.95)}
+          className="mt-16 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line md:mt-20 lg:grid-cols-4"
+        >
+          {metrics.map((metric) => (
+            <div key={metric.label} className="flex flex-col-reverse justify-end bg-ink/90 p-5 sm:p-6">
+              <dt className="mt-2 text-sm text-muted">
+                {metric.label}
+                <span className="mt-1 block font-mono text-[0.68rem] text-dim">{metric.source}</span>
+              </dt>
+              <dd className="metric text-4xl font-semibold sm:text-5xl">
+                <Counter value={metric.value} suffix={metric.suffix} />
+              </dd>
+            </div>
+          ))}
+        </motion.dl>
       </div>
 
       <TechMarquee />
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2 }}
-        className="absolute bottom-28 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2"
-      >
-        <span className="text-[10px] font-mono text-slate-600 tracking-widest uppercase">Scroll</span>
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-          className="w-5 h-8 rounded-full border border-white/15 flex justify-center pt-1.5"
-        >
-          <div className="w-1 h-2 rounded-full bg-accent/80" />
-        </motion.div>
-      </motion.div>
     </section>
   );
 }

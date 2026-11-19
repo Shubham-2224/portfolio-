@@ -1,81 +1,53 @@
-import { ArrowUp, Mail } from "lucide-react";
-import GitHubIcon from "./ui/GitHubIcon";
-import { personalInfo, navLinks } from "../data/portfolio";
+import { ArrowUp } from "lucide-react";
+import { navLinks, personalInfo } from "../data/portfolio";
 
 export default function Footer() {
   return (
-    <footer className="relative border-t border-white/5">
-      <div className="section-container py-12 md:py-16">
-        <div className="grid md:grid-cols-3 gap-10 mb-12">
+    <footer className="relative overflow-hidden border-t border-line">
+      <div className="shell pt-14 pb-8">
+        <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
           <div>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center font-display font-black text-sm">
-                SD
-              </div>
-              <div>
-                <p className="font-display font-bold">{personalInfo.name}</p>
-                <p className="text-xs text-slate-500">{personalInfo.title}</p>
-              </div>
-            </div>
-            <p className="text-sm text-slate-500 leading-relaxed max-w-xs">
-              Delivering production-ready AI systems focused on automation, accuracy, and measurable business value.
-            </p>
+            <p className="font-display text-xl font-semibold">{personalInfo.name}</p>
+            <p className="mt-1 text-sm text-muted">{personalInfo.role}</p>
           </div>
 
-          <div>
-            <h4 className="font-display font-semibold text-sm mb-4 text-slate-300">Navigation</h4>
-            <div className="grid grid-cols-2 gap-2">
+          <nav aria-label="Footer">
+            <ul className="flex flex-wrap gap-x-6 gap-y-3 text-sm text-muted">
               {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  className="text-sm text-slate-500 hover:text-accent transition-colors"
-                >
-                  {link.name}
-                </a>
+                <li key={link.href}>
+                  <a href={link.href} className="link-underline transition-colors hover:text-fg">
+                    {link.name}
+                  </a>
+                </li>
               ))}
-            </div>
-          </div>
+              <li>
+                <a
+                  href={personalInfo.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="link-underline transition-colors hover:text-fg"
+                >
+                  GitHub
+                </a>
+              </li>
+            </ul>
+          </nav>
 
-          <div>
-            <h4 className="font-display font-semibold text-sm mb-4 text-slate-300">Connect</h4>
-            <div className="space-y-3">
-              <a
-                href={`mailto:${personalInfo.email}`}
-                className="flex items-center gap-2 text-sm text-slate-500 hover:text-white transition-colors"
-              >
-                <Mail className="w-4 h-4" />
-                {personalInfo.email}
-              </a>
-              <a
-                href={personalInfo.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sm text-slate-500 hover:text-white transition-colors"
-              >
-                <GitHubIcon className="w-4 h-4" />
-                @{personalInfo.github}
-              </a>
-            </div>
-          </div>
+          <a href="#home" className="btn btn-ghost self-start !min-h-10 !px-4 !py-2 text-sm">
+            Back to top
+            <ArrowUp className="h-4 w-4" aria-hidden="true" />
+          </a>
         </div>
 
-        <div className="section-divider mb-8" />
+        <p aria-hidden="true" className="wordmark mt-14 whitespace-nowrap text-center text-[clamp(2.25rem,11vw,10.75rem)]">
+          {personalInfo.name}
+        </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-slate-600">
-            © {new Date().getFullYear()} {personalInfo.name}. All rights reserved.
+        <div className="mt-8 flex flex-col gap-2 border-t border-line pt-6 font-mono text-xs text-dim sm:flex-row sm:justify-between">
+          <p>
+            © {new Date().getFullYear()} {personalInfo.name}
           </p>
-          <p className="text-xs text-slate-600 font-mono">
-            Designed with React · Tailwind · Framer Motion
-          </p>
-          <a
-            href="#home"
-            className="p-3 rounded-xl glass border border-white/8 hover:border-primary/30 transition-all group"
-            aria-label="Back to top"
-          >
-            <ArrowUp className="w-4 h-4 text-slate-500 group-hover:text-accent transition-colors" />
-          </a>
+          <p>Built with React, Tailwind CSS & Framer Motion</p>
         </div>
       </div>
     </footer>

@@ -1,71 +1,56 @@
-import { motion } from "framer-motion";
+import { BrainCircuit, ChartColumn, Cloud, Code, Database, Eye, Sparkles, Workflow } from "lucide-react";
 import { skills } from "../data/portfolio";
-import { SectionHeading, FadeIn } from "./ui/SectionHeading";
+import { Reveal, SectionHeader } from "./ui/Motion";
 
-const categoryMeta = {
-  Programming: { color: "from-blue-600/30 to-blue-900/20", accent: "text-blue-400" },
-  "Data Science": { color: "from-emerald-600/30 to-emerald-900/20", accent: "text-emerald-400" },
-  "Machine Learning": { color: "from-purple-600/30 to-purple-900/20", accent: "text-purple-400" },
-  "Computer Vision": { color: "from-orange-600/30 to-orange-900/20", accent: "text-orange-400" },
-  "NLP & Generative AI": { color: "from-cyan-600/30 to-cyan-900/20", accent: "text-cyan-400" },
-  MLOps: { color: "from-pink-600/30 to-pink-900/20", accent: "text-pink-400" },
-  "Cloud & DevOps": { color: "from-amber-600/30 to-amber-900/20", accent: "text-amber-400" },
+const icons = {
+  Programming: Code,
+  "Data Science": Database,
+  "Analytics & BI": ChartColumn,
+  "Machine Learning": BrainCircuit,
+  "NLP & Generative AI": Sparkles,
+  "Computer Vision": Eye,
+  MLOps: Workflow,
+  "Cloud & Tooling": Cloud,
 };
 
 export default function Skills() {
-  return (
-    <section id="skills" className="relative py-28 md:py-36">
-      <div className="absolute inset-0 section-divider top-0" />
+  const total = skills.reduce((sum, group) => sum + group.items.length, 0);
 
-      <div className="section-container">
-        <SectionHeading
-          number="03"
-          subtitle="Skills"
-          title="Technical Arsenal"
-          description="End-to-end expertise spanning data pipelines, model development, and production deployment."
+  return (
+    <section id="skills" className="section border-t border-line">
+      <div className="shell">
+        <SectionHeader
+          index="02"
+          label="Skills"
+          title={[{ text: "The full stack, from" }, { text: "raw data to deployed model.", accent: true }]}
+          lead={`${total} tools and techniques across ${skills.length} areas — covering analysis, modelling and production deployment.`}
         />
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {skills.map((skillGroup, index) => {
-            const meta = categoryMeta[skillGroup.category] || {
-              color: "from-primary/30 to-secondary/20",
-              accent: "text-primary",
-            };
-
+        <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {skills.map((group, index) => {
+            const Icon = icons[group.category] ?? Code;
             return (
-              <FadeIn key={skillGroup.category} delay={index * 0.08}>
-                <motion.div
-                  whileHover={{ y: -6 }}
-                  className={`glass-card rounded-2xl p-6 h-full bg-gradient-to-br ${meta.color} relative overflow-hidden group`}
-                >
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full blur-2xl group-hover:bg-white/10 transition-colors" />
-
-                  <div className="relative">
-                    <div className="flex items-center justify-between mb-5">
-                      <h3 className={`font-display font-bold text-lg ${meta.accent}`}>
-                        {skillGroup.category}
-                      </h3>
-                      <span className="text-[10px] font-mono text-slate-600">
-                        {String(skillGroup.items.length).padStart(2, "0")}
-                      </span>
-                    </div>
-
-                    <div className="flex flex-wrap gap-2">
-                      {skillGroup.items.map((item) => (
-                        <span
-                          key={item}
-                          className="px-3 py-1.5 rounded-lg bg-black/25 border border-white/6 text-xs text-slate-300 hover:border-white/15 hover:text-white transition-all"
-                        >
-                          {item}
-                        </span>
-                      ))}
-                    </div>
+              <Reveal as="li" key={group.category} delay={(index % 4) * 0.06} y={20}>
+                <div className="card spot group h-full p-6">
+                  <div className="mb-5 flex items-center justify-between">
+                    <span className="grid h-10 w-10 place-items-center rounded-xl border border-line bg-white/[0.03] transition-colors duration-500 group-hover:border-signal/40 group-hover:bg-signal/10">
+                      <Icon className="h-[1.15rem] w-[1.15rem] text-signal" aria-hidden="true" />
+                    </span>
+                    <span className="font-mono text-xs text-dim">{String(index + 1).padStart(2, "0")}</span>
                   </div>
-                </motion.div>
-              </FadeIn>
+                  <h3 className="mb-4 text-lg font-semibold">{group.category}</h3>
+                  <ul className="flex flex-wrap gap-1.5">
+                    {group.items.map((item) => (
+                      <li key={item} className="chip">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Reveal>
             );
           })}
-        </div>
+        </ul>
       </div>
     </section>
   );

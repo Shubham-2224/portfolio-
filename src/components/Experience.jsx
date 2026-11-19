@@ -1,84 +1,84 @@
-import { motion } from "framer-motion";
-import { Briefcase, Building2 } from "lucide-react";
 import { experience } from "../data/portfolio";
-import { SectionHeading, FadeIn } from "./ui/SectionHeading";
+import { Reveal, SectionHeader } from "./ui/Motion";
+
+// Emphasise the quantified part of each achievement (40%, 10,000+, …).
+const NUMBER = /(\d[\d,]*(?:%|\+)+)/;
+
+function Highlighted({ text }) {
+  return text.split(NUMBER).map((part, index) =>
+    index % 2 === 1 ? (
+      <strong key={index} className="font-semibold text-signal">
+        {part}
+      </strong>
+    ) : (
+      part
+    )
+  );
+}
 
 export default function Experience() {
   return (
-    <section id="experience" className="relative py-28 md:py-36">
-      <div className="absolute inset-0 section-divider top-0" />
-
-      <div className="section-container">
-        <SectionHeading
-          number="04"
-          subtitle="Experience"
-          title="Professional Journey"
-          description="Delivering measurable impact through AI development and data-driven insights."
+    <section id="experience" className="section border-t border-line">
+      <div className="shell">
+        <SectionHeader
+          index="03"
+          label="Experience"
+          title={[{ text: "Where the work" }, { text: "has shipped.", accent: true }]}
         />
 
-        <div className="relative max-w-4xl mx-auto">
-          <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-primary/50 via-secondary/30 to-transparent md:-translate-x-px" />
-
-          {experience.map((job, index) => (
-            <FadeIn key={job.role} delay={index * 0.15}>
-              <div
-                className={`relative flex flex-col md:flex-row gap-8 mb-12 last:mb-0 ${
-                  index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-                }`}
-              >
-                <div className="hidden md:block md:w-1/2" />
-
-                <div
-                  className={`md:w-1/2 pl-16 md:pl-0 ${
-                    index % 2 === 0 ? "md:pr-12" : "md:pl-12"
-                  }`}
-                >
-                  <motion.div
-                    whileHover={{ y: -4 }}
-                    className="glass-card rounded-2xl p-6 md:p-8 gradient-border relative"
-                  >
-                    <div className="flex items-center gap-2 mb-4">
-                      <span className="px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-mono">
-                        {job.period}
+        <ol>
+          {experience.map((job) => (
+            <li key={`${job.company}-${job.role}`} className="grid grid-cols-1 gap-6 border-t border-line py-10 md:py-14 lg:grid-cols-12 lg:gap-10">
+              <Reveal className="lg:col-span-4">
+                <div className="lg:sticky lg:top-28">
+                  <p className="flex items-center gap-3 font-mono text-sm text-muted">
+                    {job.period}
+                    {job.current && (
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-signal/40 bg-signal/10 px-2 py-0.5 text-[0.65rem] uppercase tracking-wider text-signal">
+                        <span className="h-1.5 w-1.5 rounded-full bg-signal animate-blink" />
+                        Now
                       </span>
-                    </div>
-
-                    <div className="flex items-start gap-4 mb-5">
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-secondary to-primary flex items-center justify-center shrink-0">
-                        <Briefcase className="w-5 h-5 text-white" />
-                      </div>
-                      <div>
-                        <h3 className="font-display text-xl font-bold">{job.role}</h3>
-                        <p className="text-slate-400 text-sm flex items-center gap-1.5 mt-1">
-                          <Building2 className="w-3.5 h-3.5 text-primary" />
-                          {job.company}
-                        </p>
-                      </div>
-                    </div>
-
-                    <ul className="space-y-3">
-                      {job.achievements.map((achievement, i) => (
-                        <motion.li
-                          key={achievement}
-                          initial={{ opacity: 0, x: -10 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ delay: i * 0.06 }}
-                          className="flex items-start gap-3 text-sm text-slate-400"
-                        >
-                          <span className="w-1.5 h-1.5 rounded-full bg-accent mt-2 shrink-0" />
-                          {achievement}
-                        </motion.li>
-                      ))}
-                    </ul>
-                  </motion.div>
+                    )}
+                  </p>
+                  <p className="mt-3 font-display text-xl font-semibold">{job.company}</p>
+                  <p className="eyebrow mt-2">{job.track}</p>
                 </div>
+              </Reveal>
 
-                <div className="absolute left-8 md:left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-background border-2 border-primary z-10 shadow-lg shadow-primary/30" />
+              <div className="lg:col-span-8">
+                <Reveal>
+                  <h3 className="text-3xl font-semibold md:text-4xl">{job.role}</h3>
+                  <p className="mt-3 max-w-2xl text-lg text-muted">{job.summary}</p>
+                </Reveal>
+
+                <ul className="mt-8 grid gap-x-8 sm:grid-cols-2">
+                  {job.achievements.map((achievement, index) => (
+                    <Reveal as="li" key={achievement} delay={index * 0.05} y={14}>
+                      <p className="flex gap-3 border-t border-line py-4 text-[0.95rem] leading-relaxed text-fg/85">
+                        <span className="font-mono text-xs text-dim pt-1" aria-hidden="true">
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                        <span>
+                          <Highlighted text={achievement} />
+                        </span>
+                      </p>
+                    </Reveal>
+                  ))}
+                </ul>
+
+                <Reveal delay={0.1}>
+                  <ul className="mt-6 flex flex-wrap gap-2" aria-label="Technologies used">
+                    {job.stack.map((tech) => (
+                      <li key={tech} className="chip">
+                        {tech}
+                      </li>
+                    ))}
+                  </ul>
+                </Reveal>
               </div>
-            </FadeIn>
+            </li>
           ))}
-        </div>
+        </ol>
       </div>
     </section>
   );

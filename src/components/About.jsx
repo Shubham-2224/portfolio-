@@ -1,93 +1,115 @@
-import { motion } from "framer-motion";
-import { Code2, Brain, Sparkles, Database, Cloud, Bot } from "lucide-react";
-import { personalInfo } from "../data/portfolio";
-import { SectionHeading, FadeIn } from "./ui/SectionHeading";
+import { useEffect, useState } from "react";
+import { BrainCircuit, Briefcase, ChartColumn, GraduationCap, MapPin } from "lucide-react";
+import { disciplines, education, experience, personalInfo } from "../data/portfolio";
+import { Reveal, SectionHeader } from "./ui/Motion";
 
-const expertise = [
-  { icon: Code2, label: "Python Development", desc: "Scalable backend & automation" },
-  { icon: Brain, label: "Machine Learning", desc: "CNN, RNN, Transfer Learning" },
-  { icon: Sparkles, label: "Generative AI", desc: "LLMs, RAG, Prompt Engineering" },
-  { icon: Database, label: "Data Science", desc: "EDA, visualization & insights" },
-  { icon: Bot, label: "NLP & Computer Vision", desc: "BERT, OpenCV, YOLOv8" },
-  { icon: Cloud, label: "Cloud & MLOps", desc: "AWS, Docker, CI/CD" },
-];
+const disciplineIcons = { ai: BrainCircuit, data: ChartColumn };
+
+function LocalTime() {
+  const format = () =>
+    new Intl.DateTimeFormat("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZone: personalInfo.timeZone,
+    }).format(new Date());
+  const [time, setTime] = useState(format);
+
+  useEffect(() => {
+    const timer = setInterval(() => setTime(format()), 20_000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return <span className="tabular-nums">{time} IST</span>;
+}
 
 export default function About() {
+  const current = experience.find((job) => job.current) ?? experience[0];
+  const degree = education[0];
+
+  const facts = [
+    { icon: Briefcase, label: "Currently", value: current.role, detail: current.company },
+    { icon: MapPin, label: "Based in", value: personalInfo.location, detail: personalInfo.workMode },
+    { icon: GraduationCap, label: "Education", value: "B.Tech, AI & Data Science", detail: degree.score },
+  ];
+
   return (
-    <section id="about" className="relative py-28 md:py-36">
-      <div className="section-container">
-        <SectionHeading
-          number="01"
-          subtitle="About Me"
-          title="Engineering Intelligence at Scale"
-          description="Transforming complex data into actionable AI-powered solutions for real-world impact."
+    <section id="about" className="section">
+      <div className="shell">
+        <SectionHeader
+          index="01"
+          label="About"
+          title={[{ text: "Two disciplines," }, { text: "one pipeline.", accent: true }]}
+          lead="I work on both sides of the model: the analysis that tells you what is worth building, and the engineering that gets it into production."
         />
 
-        <div className="grid lg:grid-cols-5 gap-8">
-          <FadeIn direction="left" className="lg:col-span-2">
-            <div className="glass-card rounded-3xl p-8 h-full gradient-border relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-48 h-48 bg-primary/10 rounded-full blur-3xl" />
-
-              <div className="relative">
-                <div className="flex items-center gap-4 mb-8">
-                  <div className="profile-ring">
-                    <img
-                      src={personalInfo.profileImage}
-                      alt={`${personalInfo.name} profile`}
-                      className="w-20 h-20 rounded-full object-cover object-center"
-                    />
-                  </div>
-                  <div>
-                    <h3 className="font-display text-xl font-bold">{personalInfo.name}</h3>
-                    <p className="text-sm text-accent font-mono">{personalInfo.title}</p>
-                  </div>
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
+          <Reveal className="lg:col-span-4">
+            <figure className="card group relative h-full min-h-[24rem]">
+              <img
+                src={personalInfo.profileImage}
+                alt={`Portrait of ${personalInfo.name}`}
+                width="800"
+                height="800"
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 h-full w-full object-cover object-[50%_15%] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/20 to-transparent" aria-hidden="true" />
+              <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-6">
+                <div>
+                  <p className="text-lg font-semibold leading-tight">{personalInfo.name}</p>
+                  <p className="mt-1 text-sm text-muted">{personalInfo.role}</p>
                 </div>
-
-                <p className="text-slate-400 leading-relaxed text-sm mb-8">
-                  {personalInfo.about}
+                <p className="font-mono text-[0.68rem] text-muted">
+                  <LocalTime />
                 </p>
+              </figcaption>
+            </figure>
+          </Reveal>
 
-                <div className="terminal-window">
-                  <div className="terminal-header">
-                    <span className="terminal-dot bg-red-500/80" />
-                    <span className="terminal-dot bg-yellow-500/80" />
-                    <span className="terminal-dot bg-green-500/80" />
-                    <span className="ml-2 text-xs text-slate-500 font-mono">profile.sh</span>
+          <Reveal delay={0.08} className="lg:col-span-8">
+            <article className="card spot flex h-full flex-col p-7 md:p-10">
+              <p className="eyebrow mb-6">Profile</p>
+              <p className="text-xl leading-[1.5] tracking-tight text-fg/90 md:text-2xl md:leading-[1.45]">
+                {personalInfo.about}
+              </p>
+              <dl className="mt-auto grid grid-cols-1 gap-6 border-t border-line pt-7 sm:grid-cols-3 max-md:mt-8 md:mt-10">
+                {facts.map((fact) => (
+                  <div key={fact.label}>
+                    <dt className="eyebrow mb-2 flex items-center gap-2">
+                      <fact.icon className="h-3.5 w-3.5 text-signal" aria-hidden="true" />
+                      {fact.label}
+                    </dt>
+                    <dd className="font-semibold leading-snug">{fact.value}</dd>
+                    <dd className="mt-1 text-sm text-muted">{fact.detail}</dd>
                   </div>
-                  <div className="p-4 font-mono text-xs space-y-1 text-slate-400">
-                    <p><span className="text-accent">$</span> whoami</p>
-                    <p className="text-white pl-2">shubham_desai — AI Engineer</p>
-                    <p><span className="text-accent">$</span> cat expertise.txt</p>
-                    <p className="text-green-400 pl-2">Python | ML | GenAI | AWS</p>
-                    <p><span className="text-accent">$</span> status</p>
-                    <p className="text-emerald-400 pl-2">● Available for opportunities</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </FadeIn>
+                ))}
+              </dl>
+            </article>
+          </Reveal>
 
-          <FadeIn direction="right" delay={0.15} className="lg:col-span-3">
-            <div className="grid sm:grid-cols-2 gap-4">
-              {expertise.map((item, i) => (
-                <motion.div
-                  key={item.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.08 }}
-                  whileHover={{ y: -4 }}
-                  className="glass-card rounded-2xl p-5 group cursor-default"
-                >
-                  <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary/20 to-accent/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                    <item.icon className="w-5 h-5 text-accent" />
-                  </div>
-                  <h4 className="font-display font-semibold text-white mb-1">{item.label}</h4>
-                  <p className="text-xs text-slate-500 leading-relaxed">{item.desc}</p>
-                </motion.div>
-              ))}
-            </div>
-          </FadeIn>
+          {disciplines.map((discipline, index) => {
+            const Icon = disciplineIcons[discipline.key];
+            return (
+              <Reveal key={discipline.key} delay={0.08 * index} className="lg:col-span-6">
+                <article className="card spot h-full p-7 md:p-9">
+                  <span className="mb-6 grid h-11 w-11 place-items-center rounded-xl border border-signal/30 bg-signal/10">
+                    <Icon className="h-5 w-5 text-signal" aria-hidden="true" />
+                  </span>
+                  <h3 className="text-2xl font-semibold">{discipline.title}</h3>
+                  <p className="mt-3 leading-relaxed text-muted">{discipline.summary}</p>
+                  <ul className="mt-6 space-y-3 border-t border-line pt-6">
+                    {discipline.points.map((point) => (
+                      <li key={point} className="flex gap-3 text-sm text-fg/85">
+                        <span className="mt-[0.5em] h-1.5 w-1.5 shrink-0 rounded-full bg-signal" aria-hidden="true" />
+                        {point}
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+              </Reveal>
+            );
+          })}
         </div>
       </div>
     </section>

@@ -1,106 +1,93 @@
-import { motion } from "framer-motion";
-import { ExternalLink, Scan, Globe, ImageIcon, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
+import { personalInfo, projects } from "../data/portfolio";
 import GitHubIcon from "./ui/GitHubIcon";
-import { projects } from "../data/portfolio";
-import { SectionHeading, FadeIn } from "./ui/SectionHeading";
+import ProjectVisual from "./ui/ProjectVisual";
+import { Reveal, SectionHeader } from "./ui/Motion";
 
-const iconMap = { scan: Scan, globe: Globe, image: ImageIcon };
+function ProjectCard({ project, index, featured }) {
+  return (
+    <article
+      className={`card spot group h-full ${featured ? "grid grid-cols-1 lg:grid-cols-2" : "flex flex-col"}`}
+    >
+      <div className={featured ? "min-w-0 border-b border-line lg:border-b-0 lg:border-r" : "min-w-0 border-b border-line"}>
+        <ProjectVisual type={project.visual} className={featured ? undefined : "h-80"} />
+      </div>
+
+      <div className="flex min-w-0 flex-1 flex-col p-7 md:p-9">
+        <div className="mb-5 flex items-center justify-between gap-4">
+          <p className="eyebrow">
+            <span className="text-signal">{String(index + 1).padStart(2, "0")}</span>
+            <span className="mx-2">/</span>
+            {project.kind}
+          </p>
+          <span
+            aria-hidden="true"
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-line transition-all duration-500 group-hover:rotate-45 group-hover:border-signal group-hover:bg-signal group-hover:text-ink"
+          >
+            <ArrowUpRight className="h-4 w-4" />
+          </span>
+        </div>
+
+        <h3 className={`font-semibold leading-[1.05] ${featured ? "text-3xl md:text-[2.75rem]" : "text-2xl md:text-3xl"}`}>
+          {/* Stretched link: the whole card is the click target. */}
+          <a
+            href={project.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none focus-visible:after:rounded-3xl focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-signal"
+          >
+            {project.title}
+            <span className="sr-only"> — view source on GitHub (opens in a new tab)</span>
+          </a>
+        </h3>
+
+        <p className="mt-4 leading-relaxed text-muted">{project.description}</p>
+
+        {project.highlight && (
+          <p className="mt-6 flex items-baseline gap-3">
+            <span className="metric text-5xl font-semibold text-signal">{project.highlight.value}</span>
+            <span className="text-sm text-muted">{project.highlight.label}</span>
+          </p>
+        )}
+
+        <ul className="mt-auto flex flex-wrap gap-2 pt-7">
+          {project.features.map((feature) => (
+            <li key={feature} className="chip">
+              {feature}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </article>
+  );
+}
 
 export default function Projects() {
   return (
-    <section id="projects" className="relative py-28 md:py-36">
-      <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none" />
-
-      <div className="section-container relative">
-        <SectionHeading
-          number="05"
-          subtitle="Projects"
-          title="Selected Work"
-          description="Production-grade AI systems built to solve real business challenges."
+    <section id="work" className="section border-t border-line">
+      <div className="shell">
+        <SectionHeader
+          index="04"
+          label="Selected work"
+          title={[{ text: "Projects built to solve" }, { text: "real problems.", accent: true }]}
+          lead="Computer vision, data automation and generative AI — each one open source on GitHub."
         />
 
-        <div className="space-y-8">
-          {projects.map((project, index) => {
-            const Icon = iconMap[project.icon] || Scan;
-            const isEven = index % 2 === 0;
-
-            return (
-              <FadeIn key={project.title} delay={index * 0.1}>
-                <motion.article
-                  whileHover={{ scale: 1.005 }}
-                  className="group glass-card rounded-3xl overflow-hidden gradient-border border border-white/5"
-                >
-                  <div className="grid md:grid-cols-2">
-                    <div
-                      className={`relative h-64 md:h-auto min-h-[280px] bg-gradient-to-br ${project.gradient} overflow-hidden ${
-                        isEven ? "md:order-1" : "md:order-2"
-                      }`}
-                    >
-                      <div className="absolute inset-0 grid-bg opacity-60" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-
-                      <div className="absolute top-6 left-6 font-mono text-6xl font-black text-white/5">
-                        {String(index + 1).padStart(2, "0")}
-                      </div>
-
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <motion.div
-                          whileHover={{ rotate: 5, scale: 1.05 }}
-                          className="w-24 h-24 rounded-2xl glass-card flex items-center justify-center border border-white/10"
-                        >
-                          <Icon className="w-12 h-12 text-accent" />
-                        </motion.div>
-                      </div>
-                    </div>
-
-                    <div className={`p-8 md:p-10 flex flex-col justify-center ${isEven ? "md:order-2" : "md:order-1"}`}>
-                      <div className="flex items-start justify-between gap-4 mb-4">
-                        <h3 className="font-display text-2xl md:text-3xl font-bold group-hover:text-accent transition-colors">
-                          {project.title}
-                        </h3>
-                        <a
-                          href={project.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="shrink-0 p-2.5 rounded-xl glass border border-white/8 hover:border-primary/40 hover:bg-primary/10 transition-all"
-                          aria-label="View on GitHub"
-                        >
-                          <ArrowUpRight className="w-5 h-5" />
-                        </a>
-                      </div>
-
-                      <p className="text-slate-400 leading-relaxed mb-6">
-                        {project.description}
-                      </p>
-
-                      <div className="flex flex-wrap gap-2 mb-8">
-                        {project.features.map((feature) => (
-                          <span
-                            key={feature}
-                            className="px-3 py-1.5 rounded-lg bg-primary/10 border border-primary/20 text-primary text-xs font-medium"
-                          >
-                            {feature}
-                          </span>
-                        ))}
-                      </div>
-
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 text-sm font-semibold text-slate-300 hover:text-white transition-colors group/link w-fit"
-                      >
-                        <GitHubIcon className="w-4 h-4" />
-                        View Source Code
-                        <ExternalLink className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover/link:opacity-100 group-hover/link:translate-x-0 transition-all" />
-                      </a>
-                    </div>
-                  </div>
-                </motion.article>
-              </FadeIn>
-            );
-          })}
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          {projects.map((project, index) => (
+            <Reveal key={project.title} delay={index === 0 ? 0 : 0.08 * index} className={index === 0 ? "lg:col-span-2" : ""}>
+              <ProjectCard project={project} index={index} featured={index === 0} />
+            </Reveal>
+          ))}
         </div>
+
+        <Reveal className="mt-10 flex justify-center">
+          <a href={personalInfo.githubUrl} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
+            <GitHubIcon className="h-4 w-4" />
+            More on GitHub
+            <ArrowUpRight className="h-4 w-4 text-dim" aria-hidden="true" />
+          </a>
+        </Reveal>
       </div>
     </section>
   );
